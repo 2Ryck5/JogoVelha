@@ -26,6 +26,8 @@ namespace JogoVelha2._0
 
         public void Evento(int row, int colum)
         {
+
+
             if (matriz[row, colum] == 0)
             {
                 Debug.WriteLine($"-------------------------");
@@ -36,7 +38,7 @@ namespace JogoVelha2._0
 
                 Matriz(colum, row, ReplacePlayer());
             }
-
+            
         }
 
         public void Matriz(int colum, int row, int player)
@@ -49,7 +51,7 @@ namespace JogoVelha2._0
                 Debug.WriteLine($"{item}");
             }
 
-            Resultados()
+            Resultados();
             ShowPlayer(colum, row, player);
         }
 
@@ -70,13 +72,46 @@ namespace JogoVelha2._0
         }
 
 
+        public bool TudoCompleto()
+        {
+            bool anterior = true;
+            bool nova = false;
+
+            for (int i = 0; i < matriz.GetLength(0); i++)
+            {
+                for (int j = 0; j < matriz.GetLength(0); j++)
+                {
+                    if (anterior)
+                    {
+                        if (matriz[i, j] != 0)
+                        {
+                            nova = true;
+                        }
+                        else
+                        {
+                            nova = false;
+                        }
+                    }
+                    if (nova)
+                    {
+                        anterior = nova;
+                    }
+                }
+            }
+
+            return nova;
+
+        }
+
         public void Resultados()
         {
 
-
+            Debug.WriteLine(TudoCompleto());
             Empate empate1 = new Empate();
             XWin xwin = new XWin();
             YWin ywin = new YWin();
+
+
 
 
 
