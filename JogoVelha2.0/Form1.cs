@@ -22,7 +22,7 @@ namespace JogoVelha2._0
 
         int Jogador = -1;
         int Jogadas = 9;
-        int[,] matriz = new int[3, 3] { { 0,0,0 }, { 0, 0, 0 }, { 0, 0, 0 } };
+        int[,] matriz = new int[3, 3] { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
 
         public void Evento(int row, int colum)
         {
@@ -51,7 +51,7 @@ namespace JogoVelha2._0
                 Debug.WriteLine($"{item}");
             }
 
-            Resultados();
+            TrocaDeTelas();
             ShowPlayer(colum, row, player);
         }
 
@@ -103,7 +103,7 @@ namespace JogoVelha2._0
 
         }
 
-        public void Resultados()
+        public void TrocaDeTelas()
         {
 
             Debug.WriteLine(TudoCompleto());
