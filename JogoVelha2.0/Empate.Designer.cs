@@ -52,6 +52,7 @@
             this.BntRecomecar.TabIndex = 6;
             this.BntRecomecar.Text = "Recomeçar";
             this.BntRecomecar.UseVisualStyleBackColor = true;
+            this.BntRecomecar.Click += new System.EventHandler(this.BntRecomecar_Click);
             // 
             // Empate
             // 

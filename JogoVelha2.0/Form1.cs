@@ -26,7 +26,7 @@ namespace JogoVelha2._0
         int[,] matriz = new int[3, 3] { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
 
         // Função chamada em qualquer evento de botão
-        public void Evento(int row, int colum)
+        void Evento(int row, int colum)
         {
             if (matriz[row, colum] == 0)
             {
@@ -39,7 +39,7 @@ namespace JogoVelha2._0
         //----------------------------------------------
 
         // Faz alterações na Matriz Principal
-        public void Matriz(int colum, int row, int player)
+        void Matriz(int colum, int row, int player)
         {
 
             matriz[row, colum] = player;
@@ -50,7 +50,7 @@ namespace JogoVelha2._0
         //----------------------------------------------
 
         // Troca o Jogador entre X e Y
-        public int ReplacePlayer()
+        int ReplacePlayer()
         {
             if (Jogador == 1)
             {
@@ -67,9 +67,9 @@ namespace JogoVelha2._0
         //----------------------------------------------
 
         // Checa se todas as casas estão completas (Questão de empate)
-        public bool TudoCompleto()
+        bool TudoCompleto()
         {
-            bool anterior = true;
+            bool anterior = false;
             bool nova = false;
 
             /* Testa se a casa anterior é verdadeira,
@@ -81,6 +81,10 @@ namespace JogoVelha2._0
             {
                 for (int j = 0; j < matriz.GetLength(0); j++)
                 {
+                    if ((matriz[i, j] != 0) && !nova)
+                    {
+                        anterior = true;
+                    }
                     if (anterior)
                     {
                         if (matriz[i, j] != 0)
@@ -105,17 +109,17 @@ namespace JogoVelha2._0
         //----------------------------------------------
 
         // Calcula os resultados
-        public int Resultados()
+        int Resultados()
         {
 
             // Verificar linhas
             for (int i = 0; i < 3; i++)
             {
-                if (matriz[i, 0] == 1 && matriz[i, 1] == 1 && matriz[i, 2] == 1)
+                if (matriz[i, 0] == 1 && matriz[i, 1] == 1 && matriz[i, 2] == 1 && !TudoCompleto())
                 {
                     return 1;
                 }
-                else if (matriz[i, 0] == -1 && matriz[i, 1] == -1 && matriz[i, 2] == -1)
+                else if (matriz[i, 0] == -1 && matriz[i, 1] == -1 && matriz[i, 2] == -1 && !TudoCompleto())
                 {
                     return -1;
                 }
@@ -124,11 +128,11 @@ namespace JogoVelha2._0
             // Verificar colunas
             for (int i = 0; i < 3; i++)
             {
-                if (matriz[0, i] == 1 && matriz[1, i] == 1 && matriz[2, i] == 1)
+                if (matriz[0, i] == 1 && matriz[1, i] == 1 && matriz[2, i] == 1 && !TudoCompleto())
                 {
                     return 1;
                 }
-                else if (matriz[0, i] == -1 && matriz[1, i] == -1 && matriz[2, i] == -1)
+                else if (matriz[0, i] == -1 && matriz[1, i] == -1 && matriz[2, i] == -1 && !TudoCompleto())
                 {
                     return -1;
                 }
@@ -136,12 +140,12 @@ namespace JogoVelha2._0
 
             // Verificar diagonais
             if ((matriz[0, 0] == 1 && matriz[1, 1] == 1 && matriz[2, 2] == 1) ||
-                (matriz[0, 2] == 1 && matriz[1, 1] == 1 && matriz[2, 0] == 1))
+                (matriz[0, 2] == 1 && matriz[1, 1] == 1 && matriz[2, 0] == 1) && !TudoCompleto())
             {
                 return 1;
             }
             if ((matriz[0, 0] == -1 && matriz[1, 1] == -1 && matriz[2, 2] == -1) ||
-                (matriz[0, 2] == -1 && matriz[1, 1] == -1 && matriz[2, 0] == -1))
+                (matriz[0, 2] == -1 && matriz[1, 1] == -1 && matriz[2, 0] == -1) && !TudoCompleto())
             {
                 return -1;
             }
@@ -151,7 +155,7 @@ namespace JogoVelha2._0
         //----------------------------------------------
 
         // Troca as telas 
-        public void TrocaDeTelas()
+        void TrocaDeTelas()
         {
             Empate empate1 = new Empate();
             XWin xwin = new XWin();
@@ -169,11 +173,17 @@ namespace JogoVelha2._0
                 ywin.Closed += (s, args) => this.Close();
                 ywin.Show();
             }
+            if (TudoCompleto() && Jogadas < 1)
+            {
+                this.Hide();
+                empate1.Closed += (s, args) => this.Close();
+                empate1.Show();
+            }
         }
         //----------------------------------------------
 
         // Mostra as jogadas no form (OUTPUT)
-        public void ShowPlayer(int colum, int row, int player)
+        void ShowPlayer(int colum, int row, int player)
         {
 
             for (int i = 0; i < 3; i++)

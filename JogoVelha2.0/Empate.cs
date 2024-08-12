@@ -16,5 +16,13 @@ namespace JogoVelha2._0
         {
             InitializeComponent();
         }
+
+        private void BntRecomecar_Click(object sender, EventArgs e)
+        {
+            Form1 form = new Form1();
+            this.Hide();
+            form.Closed += (s, args) => this.Close();
+            form.Show();
+        }
     }
 }
