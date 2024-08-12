@@ -17,51 +17,45 @@ namespace JogoVelha2._0
         public Form1()
         {
             InitializeComponent();
-
         }
+
+       // Variáveis
 
         int Jogador = -1;
         int Jogadas = 9;
         int[,] matriz = new int[3, 3] { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
 
+        // Função chamada em qualquer evento de botão
         public void Evento(int row, int colum)
         {
-
-
             if (matriz[row, colum] == 0)
             {
-                Debug.WriteLine($"-------------------------");
-
                 Jogadas -= 1;
                 TxtJogadas.Text = (Jogadas).ToString();
 
-
                 Matriz(colum, row, ReplacePlayer());
             }
-            
         }
+        //----------------------------------------------
 
+        // Faz alterações na Matriz Principal
         public void Matriz(int colum, int row, int player)
         {
 
             matriz[row, colum] = player;
 
-            foreach (var item in matriz)
-            {
-                Debug.WriteLine($"{item}");
-            }
-
             TrocaDeTelas();
             ShowPlayer(colum, row, player);
         }
+        //----------------------------------------------
 
+        // Troca o Jogador entre X e Y
         public int ReplacePlayer()
         {
             if (Jogador == 1)
             {
                 TxtJogadorDaVez.Text = "X";
                 Jogador = -1;
-
             }
             else
             {
@@ -70,12 +64,18 @@ namespace JogoVelha2._0
             }
             return Jogador;
         }
+        //----------------------------------------------
 
-
+        // Checa se todas as casas estão completas (Questão de empate)
         public bool TudoCompleto()
         {
             bool anterior = true;
             bool nova = false;
+
+            /* Testa se a casa anterior é verdadeira,
+             * Se a casa for != 0 define a casa nova como true, caso contrario como false
+             * Retorna a casa nova (True = Tudo completo, False = Falta alguma casa) */
+
 
             for (int i = 0; i < matriz.GetLength(0); i++)
             {
@@ -102,21 +102,77 @@ namespace JogoVelha2._0
             return nova;
 
         }
+        //----------------------------------------------
 
-        public void TrocaDeTelas()
+        // Calcula os resultados
+        public int Resultados()
         {
 
-            Debug.WriteLine(TudoCompleto());
+            // Verificar linhas
+            for (int i = 0; i < 3; i++)
+            {
+                if (matriz[i, 0] == 1 && matriz[i, 1] == 1 && matriz[i, 2] == 1)
+                {
+                    return 1;
+                }
+                else if (matriz[i, 0] == -1 && matriz[i, 1] == -1 && matriz[i, 2] == -1)
+                {
+                    return -1;
+                }
+            }
+
+            // Verificar colunas
+            for (int i = 0; i < 3; i++)
+            {
+                if (matriz[0, i] == 1 && matriz[1, i] == 1 && matriz[2, i] == 1)
+                {
+                    return 1;
+                }
+                else if (matriz[0, i] == -1 && matriz[1, i] == -1 && matriz[2, i] == -1)
+                {
+                    return -1;
+                }
+            }
+
+            // Verificar diagonais
+            if ((matriz[0, 0] == 1 && matriz[1, 1] == 1 && matriz[2, 2] == 1) ||
+                (matriz[0, 2] == 1 && matriz[1, 1] == 1 && matriz[2, 0] == 1))
+            {
+                return 1;
+            }
+            if ((matriz[0, 0] == -1 && matriz[1, 1] == -1 && matriz[2, 2] == -1) ||
+                (matriz[0, 2] == -1 && matriz[1, 1] == -1 && matriz[2, 0] == -1))
+            {
+                return -1;
+            }
+
+            return 0;
+        }
+        //----------------------------------------------
+
+        // Troca as telas 
+        public void TrocaDeTelas()
+        {
             Empate empate1 = new Empate();
             XWin xwin = new XWin();
             YWin ywin = new YWin();
 
-
-
-
-
+            if (Resultados() == 1)
+            {
+                this.Hide();
+                xwin.Closed += (s, args) => this.Close();
+                xwin.Show();
+            }
+            if (Resultados() == -1)
+            {
+                this.Hide();
+                ywin.Closed += (s, args) => this.Close();
+                ywin.Show();
+            }
         }
+        //----------------------------------------------
 
+        // Mostra as jogadas no form (OUTPUT)
         public void ShowPlayer(int colum, int row, int player)
         {
 
@@ -126,9 +182,9 @@ namespace JogoVelha2._0
                 {
                     string pos = i + " " + j;
 
-                    if (matriz[i,j] == 1)
+                    if (matriz[i, j] == 1)
                     {
-                        if ( pos == "0 0")
+                        if (pos == "0 0")
                         {
                             BntA00.Text = "X";
                         }
@@ -166,7 +222,7 @@ namespace JogoVelha2._0
                         }
 
                     }
-                    if(matriz[i, j] == -1)
+                    if (matriz[i, j] == -1)
                     {
                         if (pos == "0 0")
                         {
@@ -209,25 +265,27 @@ namespace JogoVelha2._0
                 }
             }
         }
+        //----------------------------------------------
 
+        // Botões (INPUT)
         private void BntA00_Click(object sender, EventArgs e)
         {
-            Evento(0,0);
+            Evento(0, 0);
         }
 
         private void BntA01_Click(object sender, EventArgs e)
         {
-            Evento(0,1);
+            Evento(0, 1);
         }
 
         private void BntA02_Click(object sender, EventArgs e)
         {
-            Evento(0,2);
+            Evento(0, 2);
         }
 
         private void BntA10_Click(object sender, EventArgs e)
         {
-            Evento(1,0);
+            Evento(1, 0);
         }
 
         private void BntA11_Click(object sender, EventArgs e)
@@ -237,22 +295,24 @@ namespace JogoVelha2._0
 
         private void BntA12_Click(object sender, EventArgs e)
         {
-            Evento(1,2);
+            Evento(1, 2);
         }
 
         private void BntA20_Click(object sender, EventArgs e)
         {
-            Evento(2,0);
+            Evento(2, 0);
         }
 
         private void BntA21_Click(object sender, EventArgs e)
         {
-            Evento(2,1);
+            Evento(2, 1);
         }
 
         private void BntA22_Click(object sender, EventArgs e)
         {
-            Evento(2,2);
+            Evento(2, 2);
         }
+        //----------------------------------------------
     }
 }
+
